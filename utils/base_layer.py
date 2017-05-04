@@ -125,6 +125,12 @@ class BaseLayer(object):
         else:
             raise AttributeError("init b for %r type %r error", name, type(b))
 
+    def get_output_by_input(self, **kwargs):
+
+        input_val = kwargs.get("input_val") or []
+        output_val = T.nnet.sigmoid(T.dot(input_val, self.W) + self.b_h)
+        return output_val
+
 if __name__ == "__main__":
     base_layer = BaseLayer(n_v=2, n_h=2)
 

@@ -75,12 +75,17 @@ class MultiBaseLayer(object):
                 self.base_layer[i].param_output(file_name="%s_%d" % (file_name, i))
                 writer.writerow(("%s_%d" % (file_name, i),))
 
+    def get_output_by_input(self, **kwargs):
+
+        input_val = kwargs.get("input_val") or []
+        tmp_val = input_val
+        for layer in self.base_layer:
+            tmp_val = layer.get_output_by_input(input_val=tmp_val)
+        return tmp_val
+
 
 if __name__ == "__main__":
     multi_base_layer = MultiBaseLayer(file_name="test_multi.csv")
     for layer in multi_base_layer.base_layer:
         print layer.W.get_value(borrow=True)
-    multi_base_layer.param_output(file_name="test_multi.csv")
-else:
-    multi_base_layer = MultiBaseLayer(base_layer=BL, n_layers=[10, 8, 6, 4])
     multi_base_layer.param_output(file_name="test_multi.csv")

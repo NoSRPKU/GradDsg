@@ -38,7 +38,7 @@ class LoadTrafficDataForLearning(LoadTrafficData):
 
     def generate_data(self, train_beg='2009-01-01 00:00:00', verify_beg='2013-01-01 00:00:00',
                       test_beg='2014-01-01 00:00:00', data_end='2015-01-01 00:00:00', time_interval=8, out_column=None):
-        if not out_column:
+        if out_column is None:
             self.out_column = tuple(range(0, self.column_count))
         else:
             self.out_column = get_list_from_val(out_column)
@@ -92,5 +92,5 @@ class LoadTrafficDataForLearning(LoadTrafficData):
 
 if __name__ == "__main__":
     data = LoadTrafficDataForLearning(path="/home/nosr/Documents/out", file_name="AL2949.csv")
-    data.generate_data(out_column=2)
+    data.generate_data()
     tin, tout = data.get_train_data()
