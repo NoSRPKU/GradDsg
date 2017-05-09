@@ -61,7 +61,7 @@ class GenerateData(object):
         return self.test_input_data, self.test_output_data
 
     def _default_func(self, row):
-        param = 1#np.log(np.asarray(range(0, len(row))) + 1) + 2
+        param = np.log(np.asarray(range(0, len(row))) + 1) + 2
         if isinstance(row, (list, tuple)):
             row = np.asarray(row)
         return np.sqrt(np.sum((row ** 2) * param))

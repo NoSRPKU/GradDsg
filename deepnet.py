@@ -139,10 +139,10 @@ if __name__ == '__main__':
     data = GenerateData()#ßfile_name="data/inputfile.csv")
     train_inp, train_outp = data.get_train_data()
     verify_inp, verify_outp = data.get_verify_data()
-    data.save_to_file("data/inputfile.csv")
+    data.save_to_file("data/inputfile2.csv")
     net = DeepNet(base_layer=ReverseLayer, n_layers=[30, 30, 25, 16, 9, 1], activation=T.nnet.softplus)
     ov = net.train(input_val=train_inp, output_val=train_outp, rand_epoch=3000, epoch=1000, sample_size=len(train_inp), batch_size=1000, pre_cease_threshold=0.00001)
-    net.param_output(file_name="data/train/train_0003.csv")
+    net.param_output(file_name="data/train/train_0004.csv")
 
     out1, out2 = net.get_output_by_input_with_fil(input_val=verify_inp)
     outt = net.get_output_by_input(input_val=verify_inp)
@@ -153,7 +153,7 @@ if __name__ == '__main__':
 
     import csv
 
-    with open("test_out_k002.csv", "wb") as f:
+    with open("test_out_k004.csv", "wb") as f:
         writer = csv.writer(f)
         for line in zip(out1.tolist(), get_val(net.activation(verify_outp)).tolist(), out2.tolist(), verify_inp, get_val(outt).tolist(), verify_outp):
             writer.writerow(get_list_from_val(line))
