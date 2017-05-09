@@ -8,6 +8,7 @@ import theano
 from theano import tensor as T
 from logger import logger
 from utils import get_val
+from common import get_list_from_val
 
 class ReverseLayer(BaseLayer):
 
@@ -28,6 +29,7 @@ class ReverseLayer(BaseLayer):
         if self.n_v <= self.n_h:
             self.W_fil = self.W
             self.b_h_fil = self.b_h
+            return
         S1 = np.append(s, np.ones(self.n_v - self.n_h))
         S2 = np.diag(S1)
         Vh1 = np.c_[Vh, np.zeros(shape=(self.n_h, self.n_v - self.n_h))]
@@ -51,7 +53,7 @@ class ReverseLayer(BaseLayer):
         input_val = kwargs.get("input_val", [])
         tmp_output = T.dot(input_val, self.W_fil) + self.b_h_fil
         nxt_val, pp_val = tmp_output[:, 0:self.n_h], tmp_output[:, self.n_h:self.n_v]
-        output_val = T.nnet.sigmoid(nxt_val)
+        output_val = self.activation(nxt_val)
         output_val = get_val(output_val)
         pp_val = get_val(pp_val)
         logger.info("fil shape %s", output_val.shape)

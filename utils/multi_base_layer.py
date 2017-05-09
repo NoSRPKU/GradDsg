@@ -8,13 +8,19 @@ import numpy as np
 from logger import logger
 
 from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
+import theano.tensor as T
 
 class MultiBaseLayer(object):
 
     def __init__(self, **kwargs):
 
         self.BaseLayer = kwargs.get("base_layer") or BL
-
+        activation = kwargs.get("activation")
+        if activation is None:
+            logger.info("activation sigmoid")
+            self.activation = T.nnet.sigmoid
+        else:
+            self.activation = activation
         np_seed = kwargs.get("np_seed") or int(time.time())
         logger.info("setting np_seed %r", np_seed)
         self.np_rng = np.random.RandomState(np_seed)
@@ -48,7 +54,7 @@ class MultiBaseLayer(object):
         for i in range(0, len(file_list)):
             item_file_name = file_list[i]
             logger.info("loading file %r", item_file_name)
-            layer = self.BaseLayer(file_name=item_file_name)
+            layer = self.BaseLayer(file_name=item_file_name, activation=self.activation)
             self.base_layer.append(layer)
             self.params += layer.params
 
@@ -61,7 +67,7 @@ class MultiBaseLayer(object):
         self.base_layer = []
         self.params = []
         for i in range(1, len(n_layers)):
-            layer = self.BaseLayer(n_v=n_layers[i - 1], n_h=n_layers[i])
+            layer = self.BaseLayer(n_v=n_layers[i - 1], n_h=n_layers[i], activation=self.activation)
             self.base_layer.append(layer)
             self.params += layer.params
 
